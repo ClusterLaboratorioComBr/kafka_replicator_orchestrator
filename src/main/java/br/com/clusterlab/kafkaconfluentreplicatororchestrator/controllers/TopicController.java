@@ -19,7 +19,7 @@ public class TopicController {
 
     @ResponseBody
     @GetMapping("/api/topic")
-    public String getTopicsInJSON(Authentication authentication) throws JsonProcessingException {
+    public String getTopicsInJSON() throws JsonProcessingException {
         return TopicService.getEntitiesAsString(topicService.findAll());
     }
     @ResponseBody

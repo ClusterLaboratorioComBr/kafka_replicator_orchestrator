@@ -45,5 +45,8 @@ public class TopicService {
         }
         return responses.toString();
     }
+//    public static void insertTopics(List<Topic> topics){
+//
+//    }
 
 }

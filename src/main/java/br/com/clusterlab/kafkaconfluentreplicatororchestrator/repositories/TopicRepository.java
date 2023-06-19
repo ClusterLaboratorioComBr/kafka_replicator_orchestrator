@@ -12,4 +12,5 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
     List<Topic> findTopicsByWorker(String worker);
     List<Topic> findTopicsByName(String name);
     List<Topic> findTopicsByUpdatedAfter(LocalDate date);
+//    void updateByNameAndCluster(Topic topic);
 }
