@@ -5,7 +5,6 @@ import br.com.clusterlab.kafkaconfluentreplicatororchestrator.dto.Request;
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.services.TopicService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,9 +59,8 @@ public class TopicController {
     }
     @ResponseBody
     @PostMapping("/api/topic")
-    public Request setTopics(@RequestBody @Valid Request request){
-        Integer rc = topicService.countTopicByWorkerAndClusterIs("workera","clustera");
-        System.out.println(rc.toString());
-        return request;
+    public String setTopics(@RequestBody @Valid Request request) throws JsonProcessingException {
+        topicService.insertTopics(request);
+        return TopicService.getEntitiesAsString(topicService.findAll());
     }
 }

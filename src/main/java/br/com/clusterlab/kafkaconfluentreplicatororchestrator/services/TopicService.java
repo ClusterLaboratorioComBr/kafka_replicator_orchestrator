@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class TopicService {
@@ -46,15 +43,48 @@ public class TopicService {
         }
         return responses.toString();
     }
-//    public void insertTopics(Request resquest){
-//        List<Topic> topicsEntities = new ArrayList<>();
-//        String cluster = resquest.getCluster();
-//        String action = resquest.getAction();
-//        List<String> servers = resquest.getServers();
-//        List<String> topics = resquest.getTopics();
-//
-//        topicRepository.saveAll(topicsEntities);
-//    }
+    public boolean existsTopicByNameAndClusterIs(String name, String cluster){
+        return topicRepository.existsTopicByNameAndClusterIs(name,cluster);
+
+    }
+    public void insertTopics(Request resquest){
+        List<Topic> topicsEntities = new ArrayList<>();
+        String cluster = resquest.getCluster();
+        String action = resquest.getAction();
+        List<String> servers = resquest.getServers();
+        List<String> topics = resquest.getTopics();
+        Map<String,Integer> server_map = this.getWorkerWithLessTopicsHashMap(servers,cluster);
+        if ( action == "redistribute"){
+            for (String topic: topics){
+                String designatedWorker = Collections.min(server_map.entrySet(), Map.Entry.comparingByValue()).getKey();
+                Integer designatedWorkerCount = server_map.get(designatedWorker);
+                Topic topicEntity = new Topic();
+                topicEntity.setName(topic);
+                topicEntity.setWorker(designatedWorker);
+                topicEntity.setCluster(cluster);
+                topicsEntities.add(topicEntity);
+                server_map.remove(designatedWorker);
+                server_map.put(designatedWorker,designatedWorkerCount + 1);
+            }
+        } else {
+            for (String topic: topics){
+                if ( existsTopicByNameAndClusterIs(topic, cluster) ){
+                    continue;
+                }
+                String designatedWorker = Collections.min(server_map.entrySet(), Map.Entry.comparingByValue()).getKey();
+                Integer designatedWorkerCount = server_map.get(designatedWorker);
+                Topic topicEntity = new Topic();
+                topicEntity.setName(topic);
+                topicEntity.setWorker(designatedWorker);
+                topicEntity.setCluster(cluster);
+                topicsEntities.add(topicEntity);
+                server_map.remove(designatedWorker);
+                server_map.put(designatedWorker,designatedWorkerCount + 1);
+            }
+        }
+
+        topicRepository.saveAll(topicsEntities);
+    }
     public Map<String,Integer> getWorkerWithLessTopicsHashMap(List<String> servers,String cluster){
         Map<String,Integer> server_map  = new HashMap<>();
         for (String server: servers){
@@ -62,5 +92,6 @@ public class TopicService {
         }
         return server_map;
     }
+
 
 }

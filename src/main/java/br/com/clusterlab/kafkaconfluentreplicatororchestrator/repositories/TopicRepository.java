@@ -12,5 +12,6 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
     List<Topic> findTopicsByWorker(String worker);
     List<Topic> findTopicsByName(String name);
     Integer countTopicByWorkerAndClusterIs(String worker, String cluster);
+    boolean existsTopicByNameAndClusterIs(String name, String cluster);
 
 }
