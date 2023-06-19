@@ -1,11 +1,8 @@
 package br.com.clusterlab.kafkaconfluentreplicatororchestrator.controllers;
 
-import br.com.clusterlab.kafkaconfluentreplicatororchestrator.dto.Request;
-import br.com.clusterlab.kafkaconfluentreplicatororchestrator.dto.Response;
-import br.com.clusterlab.kafkaconfluentreplicatororchestrator.entities.Topic;
+
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.services.TopicService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,28 +10,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 public class TopicController {
     @Autowired
     private TopicService topicService;
 
-    private ObjectMapper om = new ObjectMapper();
+
     @ResponseBody
     @GetMapping("/api/json/topic")
     public String getTopicsInJSON() throws JsonProcessingException {
-        List<String> responses = new ArrayList<>();
-        for(Topic topic : topicService.findAll()){
-            Response response = new Response();
-            response.setName(topic.getName());
-            response.setCluster(topic.getCluster());
-            response.setWorker(topic.getWorker());
-            response.setUpdated(String.valueOf(topic.getUpdated()));
-            responses.add(om.writeValueAsString(response));
-        }
-        return responses.toString();
+        return TopicService.getEntitiesAsString(topicService.findAll());
+    }
+    @ResponseBody
+    @GetMapping("/api/json/topic/{name}")
+    public String getTopicsByNameInJSON(@PathVariable String name) throws JsonProcessingException {
+        return TopicService.getEntitiesAsString(topicService.findTopicsByName(name));
+    }
+    @ResponseBody
+    @GetMapping("/api/json/topic/worker/{worker}")
+    public String getTopicsByWorkerInJSON(@PathVariable String worker) throws JsonProcessingException {
+        return TopicService.getEntitiesAsString(topicService.findTopicsByWorker(worker));
+    }
+    @ResponseBody
+    @GetMapping("/api/json/topic/cluster/{cluster}")
+    public String getTopicsByClusterInJSON(@PathVariable String cluster) throws JsonProcessingException {
+        return TopicService.getEntitiesAsString(topicService.findTopicsByCluster(cluster));
     }
     @GetMapping("/api/html/topic")
     public String getTopicsInHTML(Model model) {
