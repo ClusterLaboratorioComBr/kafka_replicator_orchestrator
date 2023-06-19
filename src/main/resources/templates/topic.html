@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <title>Products</title>
 </head>
+<style>
+    table, th, td {
+        border:1px solid black;
+    }
+</style>
 <body>
 
 <h2>These are all the topics:</h2>
-<table>
+<table >
     <thead>
     <tr>
         <th> Name </th>
@@ -16,15 +21,15 @@
         <th> Updated At  </th>
     </tr>
     </thead>
-    <tbody>
+    <tbody >
     <tr th:if="${topics.empty}">
-        <td colspan="2"> No Topic Available </td>
+        <td colspan="20"> No Topic Available </td>
     </tr>
     <tr th:each="topic : ${topics}">
         <td><span th:text="${topic.name}"> Name </span></td>
-        <td><span th:text="${topic.sourceCluster}"> Source Cluster </span></td>
-        <td><span th:text="${topic.associatedWorker}"> Associated Worker </span></td>
-        <td><span th:text="${topic.updatedAt}"> Updated At </span></td>
+        <td><span th:text="${topic.cluster}"> Source Cluster </span></td>
+        <td><span th:text="${topic.worker}"> Associated Worker </span></td>
+        <td><span th:text="${topic.updated}"> Updated At </span></td>
     </tr>
     </tbody>
 </table>

@@ -1,6 +1,6 @@
 {
   "action": "increment|redistribute",
-  "source_cluster": "kafka_cluster_a",
+  "cluster": "kafka_cluster_a",
   "servers": [
     "server_a",
     "server_b",

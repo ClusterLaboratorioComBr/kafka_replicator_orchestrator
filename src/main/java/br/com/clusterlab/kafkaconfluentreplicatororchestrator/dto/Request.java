@@ -13,17 +13,17 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "action",
-        "source_cluster",
+        "cluster",
         "servers",
         "topics"
 })
 @Generated("jsonschema2pojo")
-public class TopicsDTO {
+public class Request {
 
     @JsonProperty("action")
     private String action;
-    @JsonProperty("source_cluster")
-    private String sourceCluster;
+    @JsonProperty("cluster")
+    private String cluster;
     @JsonProperty("servers")
     private List<String> servers;
     @JsonProperty("topics")
@@ -41,14 +41,14 @@ public class TopicsDTO {
         this.action = action;
     }
 
-    @JsonProperty("source_cluster")
-    public String getSourceCluster() {
-        return sourceCluster;
+    @JsonProperty("cluster")
+    public String getCluster() {
+        return cluster;
     }
 
-    @JsonProperty("source_cluster")
-    public void setSourceCluster(String sourceCluster) {
-        this.sourceCluster = sourceCluster;
+    @JsonProperty("cluster")
+    public void setCluster(String Cluster) {
+        this.cluster = Cluster;
     }
 
     @JsonProperty("servers")

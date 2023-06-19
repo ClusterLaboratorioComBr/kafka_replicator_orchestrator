@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,9 @@ public class Topic {
 
     private String name;
 
-    private String sourceCluster;
+    private String cluster;
 
-    private String associatedWorker;
+    private String worker;
 
-    private final LocalDate updatedAt = LocalDate.now();
+    private final LocalDate updated = LocalDate.now();
 }
