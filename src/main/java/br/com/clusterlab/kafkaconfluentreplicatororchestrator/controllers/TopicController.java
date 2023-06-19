@@ -61,7 +61,8 @@ public class TopicController {
     @ResponseBody
     @PostMapping("/api/topic")
     public Request setTopics(@RequestBody @Valid Request request){
-
+        Integer rc = topicService.countTopicByWorkerAndClusterIs("workera","clustera");
+        System.out.println(rc.toString());
         return request;
     }
 }

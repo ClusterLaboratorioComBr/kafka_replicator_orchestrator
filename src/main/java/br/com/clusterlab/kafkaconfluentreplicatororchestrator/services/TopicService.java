@@ -1,5 +1,6 @@
 package br.com.clusterlab.kafkaconfluentreplicatororchestrator.services;
 
+import br.com.clusterlab.kafkaconfluentreplicatororchestrator.dto.Request;
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.dto.Response;
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.entities.Topic;
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.repositories.TopicRepository;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TopicService {
@@ -29,9 +32,7 @@ public class TopicService {
     public List<Topic> findTopicsByName(String name){
         return topicRepository.findTopicsByName(name);
     }
-    public List<Topic> findTopicsByUpdatedAfter(LocalDate date){
-        return findTopicsByUpdatedAfter(date);
-    }
+    public Integer countTopicByWorkerAndClusterIs(String worker, String cluster){ return topicRepository.countTopicByWorkerAndClusterIs(worker,cluster);}
     public static String getEntitiesAsString(List<Topic> topics) throws JsonProcessingException {
         ObjectMapper om = new ObjectMapper();
         List<String> responses = new ArrayList<>();
@@ -45,8 +46,21 @@ public class TopicService {
         }
         return responses.toString();
     }
-//    public static void insertTopics(List<Topic> topics){
+//    public void insertTopics(Request resquest){
+//        List<Topic> topicsEntities = new ArrayList<>();
+//        String cluster = resquest.getCluster();
+//        String action = resquest.getAction();
+//        List<String> servers = resquest.getServers();
+//        List<String> topics = resquest.getTopics();
 //
+//        topicRepository.saveAll(topicsEntities);
 //    }
+    public Map<String,Integer> getWorkerWithLessTopicsHashMap(List<String> servers,String cluster){
+        Map<String,Integer> server_map  = new HashMap<>();
+        for (String server: servers){
+            server_map.put(server,this.countTopicByWorkerAndClusterIs(server,cluster));
+        }
+        return server_map;
+    }
 
 }
