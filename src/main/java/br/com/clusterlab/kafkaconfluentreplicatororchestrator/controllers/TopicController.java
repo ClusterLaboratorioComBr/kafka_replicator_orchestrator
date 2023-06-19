@@ -1,14 +1,15 @@
 package br.com.clusterlab.kafkaconfluentreplicatororchestrator.controllers;
 
 
+import br.com.clusterlab.kafkaconfluentreplicatororchestrator.dto.Request;
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.services.TopicService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 public class TopicController {
@@ -17,22 +18,22 @@ public class TopicController {
 
 
     @ResponseBody
-    @GetMapping("/api/json/topic")
-    public String getTopicsInJSON() throws JsonProcessingException {
+    @GetMapping("/api/topic")
+    public String getTopicsInJSON(Authentication authentication) throws JsonProcessingException {
         return TopicService.getEntitiesAsString(topicService.findAll());
     }
     @ResponseBody
-    @GetMapping("/api/json/topic/{name}")
+    @GetMapping("/api/topic/{name}")
     public String getTopicsByNameInJSON(@PathVariable String name) throws JsonProcessingException {
         return TopicService.getEntitiesAsString(topicService.findTopicsByName(name));
     }
     @ResponseBody
-    @GetMapping("/api/json/topic/worker/{worker}")
+    @GetMapping("/api/topic/worker/{worker}")
     public String getTopicsByWorkerInJSON(@PathVariable String worker) throws JsonProcessingException {
         return TopicService.getEntitiesAsString(topicService.findTopicsByWorker(worker));
     }
     @ResponseBody
-    @GetMapping("/api/json/topic/cluster/{cluster}")
+    @GetMapping("/api/topic/cluster/{cluster}")
     public String getTopicsByClusterInJSON(@PathVariable String cluster) throws JsonProcessingException {
         return TopicService.getEntitiesAsString(topicService.findTopicsByCluster(cluster));
     }
@@ -56,5 +57,11 @@ public class TopicController {
     public String getTopicsByclusterInHTML(@PathVariable String cluster, Model model) {
         model.addAttribute("topics", topicService.findTopicsByCluster(cluster));
         return "topic.html";
+    }
+    @ResponseBody
+    @PostMapping("/api/topic")
+    public Request setTopics(@RequestBody @Valid Request request){
+
+        return request;
     }
 }

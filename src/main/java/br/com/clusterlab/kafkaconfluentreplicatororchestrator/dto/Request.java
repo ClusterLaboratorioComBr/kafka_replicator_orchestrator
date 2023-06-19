@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.validation.constraints.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -20,12 +21,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("jsonschema2pojo")
 public class Request {
 
+    @NotNull
     @JsonProperty("action")
     private String action;
+    @NotNull
     @JsonProperty("cluster")
     private String cluster;
+    @NotNull
     @JsonProperty("servers")
     private List<String> servers;
+    @NotNull
     @JsonProperty("topics")
     private List<String> topics;
     @JsonIgnore
