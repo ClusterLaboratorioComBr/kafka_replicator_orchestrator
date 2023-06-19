@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+
+<h2>These are all the topics:</h2>
+<table>
+    <thead>
+    <tr>
+        <th> Name </th>
+        <th> Source Cluster  </th>
+        <th> Associated Worker  </th>
+        <th> Updated At  </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${topics.empty}">
+        <td colspan="2"> No Topic Available </td>
+    </tr>
+    <tr th:each="topic : ${topics}">
+        <td><span th:text="${topic.name}"> Name </span></td>
+        <td><span th:text="${topic.sourceCluster}"> Source Cluster </span></td>
+        <td><span th:text="${topic.associatedWorker}"> Associated Worker </span></td>
+        <td><span th:text="${topic.updatedAt}"> Updated At </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
