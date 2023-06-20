@@ -6,12 +6,10 @@ import br.com.clusterlab.kafkaconfluentreplicatororchestrator.entities.Topic;
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.repositories.TopicRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -19,6 +17,7 @@ public class TopicService {
 
     @Autowired
     private TopicRepository topicRepository;
+    static Logger logger = LoggerFactory.getLogger(TopicService.class);
     public List<Topic> findAll(){
         return topicRepository.findAll();
     }
@@ -62,14 +61,17 @@ public class TopicService {
         String action = resquest.getAction();
         List<String> servers = resquest.getServers();
         List<String> topics = resquest.getTopics();
+        logger.info("Topics update. Action=" + action + ", cluster=" + cluster + ", servers=" + servers.toString() + ", topics_count=" + topics.size());
 
         if (Objects.equals(action, "redistribute")){
             List<Topic> topicsToDelete = findTopicsByCluster(cluster);
             for ( Topic topic: topicsToDelete){
+                logger.info("Redistributing topics. Deleting all topics for cluster " + cluster + " before distribution.");
                 deleteById(topic.getId());
             }
         }
         Map<String,Integer> server_map = this.getWorkerWithLessTopicsHashMap(servers,cluster);
+        Integer associationCount = 0;
         for (String topic: topics){
             if ( existsTopicByNameAndClusterIs(topic, cluster) ){
                 continue;
@@ -83,8 +85,10 @@ public class TopicService {
             topicsEntities.add(topicEntity);
             server_map.remove(designatedWorker);
             server_map.put(designatedWorker,designatedWorkerCount + 1);
+            associationCount++;
+            logger.info("Associating topic (" + associationCount + ") " + topicEntity.getCluster() + "/" + topicEntity.getName() + ":" + topicEntity.getWorker());
         }
-
+        logger.info("Updating " + topicsEntities.size() + " Topic(s) at database");
         saveAll(topicsEntities);
 
         topicsEntities = findTopicsByCluster(cluster);
@@ -99,6 +103,7 @@ public class TopicService {
             if ( ! found ){
                 if (Objects.equals(topicEntity.getCluster(),cluster)){
                     deleteById(topicEntity.getId());
+                    logger.info("Deleting orphan topic from records, " + topicEntity.getCluster() + "/" + topicEntity.getName() + ":" + topicEntity.getWorker());
                 }
 
             }
@@ -108,7 +113,9 @@ public class TopicService {
     public Map<String,Integer> getWorkerWithLessTopicsHashMap(List<String> servers,String cluster){
         Map<String,Integer> server_map  = new HashMap<>();
         for (String server: servers){
-            server_map.put(server,this.countTopicByWorkerAndClusterIs(server,cluster));
+            Integer count = this.countTopicByWorkerAndClusterIs(server,cluster);
+            server_map.put(server,count);
+            logger.info("Number of topics per worker: name=" + server + ", count=" + count);
         }
         return server_map;
     }

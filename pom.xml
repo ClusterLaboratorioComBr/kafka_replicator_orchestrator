@@ -15,6 +15,8 @@
 	<description>kafka-confluent-replicator-orchestrator</description>
 	<properties>
 		<java.version>20</java.version>
+		<snakeyaml.version>2.0</snakeyaml.version>
+		<jackson-bom.version>2.15.1</jackson-bom.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -32,10 +34,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+			<version>3.1.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
