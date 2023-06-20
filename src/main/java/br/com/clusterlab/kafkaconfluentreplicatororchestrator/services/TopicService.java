@@ -87,7 +87,7 @@ public class TopicService {
 
         saveAll(topicsEntities);
 
-        topicsEntities = findAll();
+        topicsEntities = findTopicsByCluster(cluster);
         for (Topic topicEntity: topicsEntities){
             boolean found = false;
             for (String topic: topics){

@@ -1,2 +1,1 @@
-INSERT INTO `spring`.`topic` (`id`,`name`,`cluster`,`worker`,`updated`)
-VALUES ('1','teste','clustera','workera','2013-12-03' );
+INSERT INTO topic (id,name,cluster,worker,updated) VALUES ('100','test','clustera','workera','2013-12-03' );

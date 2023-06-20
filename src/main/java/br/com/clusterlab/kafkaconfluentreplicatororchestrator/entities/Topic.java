@@ -23,5 +23,5 @@ public class Topic {
 
     private String worker;
 
-    private final LocalDate updated = LocalDate.now();
+    private final LocalDateTime updated = LocalDateTime.now();
 }
