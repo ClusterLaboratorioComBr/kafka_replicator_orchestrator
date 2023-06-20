@@ -1,17 +1,11 @@
 {
-  "action": "increment|redistribute",
+  "action": "redistribute",
   "cluster": "kafka_cluster_a",
   "servers": [
-    "server_a",
-    "server_b",
-    "server_n"
+    "um",
+    "dois",
+    "tres"
   ],
   "topics": [
-    "my_topic_a",
-    "my_topic_b",
-    "my_topic_c",
-    "my_topic_d",
-    "my_topic_e",
-    "my_topic_h"
   ]
 }

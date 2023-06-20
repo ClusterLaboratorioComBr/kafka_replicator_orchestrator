@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -21,6 +22,8 @@ import jakarta.validation.constraints.NotNull;
 @Generated("jsonschema2pojo")
 public class Request {
 
+    @Pattern(regexp = "^increment|redistribute",
+            message="Action must be one of increment|redistribute")
     @NotNull
     @JsonProperty("action")
     private String action;

@@ -6,8 +6,10 @@ import br.com.clusterlab.kafkaconfluentreplicatororchestrator.entities.Topic;
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.repositories.TopicRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -47,43 +49,61 @@ public class TopicService {
         return topicRepository.existsTopicByNameAndClusterIs(name,cluster);
 
     }
+    public void deleteById(Integer id){
+        topicRepository.deleteById(id);
+    }
+    public void saveAll(List<Topic> topics){
+        topicRepository.saveAll(topics);
+    }
+
     public void insertTopics(Request resquest){
         List<Topic> topicsEntities = new ArrayList<>();
         String cluster = resquest.getCluster();
         String action = resquest.getAction();
         List<String> servers = resquest.getServers();
         List<String> topics = resquest.getTopics();
-        Map<String,Integer> server_map = this.getWorkerWithLessTopicsHashMap(servers,cluster);
-        if ( action == "redistribute"){
-            for (String topic: topics){
-                String designatedWorker = Collections.min(server_map.entrySet(), Map.Entry.comparingByValue()).getKey();
-                Integer designatedWorkerCount = server_map.get(designatedWorker);
-                Topic topicEntity = new Topic();
-                topicEntity.setName(topic);
-                topicEntity.setWorker(designatedWorker);
-                topicEntity.setCluster(cluster);
-                topicsEntities.add(topicEntity);
-                server_map.remove(designatedWorker);
-                server_map.put(designatedWorker,designatedWorkerCount + 1);
-            }
-        } else {
-            for (String topic: topics){
-                if ( existsTopicByNameAndClusterIs(topic, cluster) ){
-                    continue;
-                }
-                String designatedWorker = Collections.min(server_map.entrySet(), Map.Entry.comparingByValue()).getKey();
-                Integer designatedWorkerCount = server_map.get(designatedWorker);
-                Topic topicEntity = new Topic();
-                topicEntity.setName(topic);
-                topicEntity.setWorker(designatedWorker);
-                topicEntity.setCluster(cluster);
-                topicsEntities.add(topicEntity);
-                server_map.remove(designatedWorker);
-                server_map.put(designatedWorker,designatedWorkerCount + 1);
+
+        if (Objects.equals(action, "redistribute")){
+            List<Topic> topicsToDelete = findTopicsByCluster(cluster);
+            for ( Topic topic: topicsToDelete){
+                deleteById(topic.getId());
             }
         }
+        Map<String,Integer> server_map = this.getWorkerWithLessTopicsHashMap(servers,cluster);
+        for (String topic: topics){
+            if ( existsTopicByNameAndClusterIs(topic, cluster) ){
+                continue;
+            }
+            String designatedWorker = Collections.min(server_map.entrySet(), Map.Entry.comparingByValue()).getKey();
+            Integer designatedWorkerCount = server_map.get(designatedWorker);
+            Topic topicEntity = new Topic();
+            topicEntity.setName(topic);
+            topicEntity.setWorker(designatedWorker);
+            topicEntity.setCluster(cluster);
+            topicsEntities.add(topicEntity);
+            server_map.remove(designatedWorker);
+            server_map.put(designatedWorker,designatedWorkerCount + 1);
+        }
 
-        topicRepository.saveAll(topicsEntities);
+        saveAll(topicsEntities);
+
+        topicsEntities = findAll();
+        for (Topic topicEntity: topicsEntities){
+            boolean found = false;
+            for (String topic: topics){
+                if (Objects.equals(topicEntity.getName(),topic) && Objects.equals(topicEntity.getCluster(),cluster) ){
+                    found=true;
+                    break;
+                }
+            }
+            if ( ! found ){
+                if (Objects.equals(topicEntity.getCluster(),cluster)){
+                    deleteById(topicEntity.getId());
+                }
+
+            }
+
+        }
     }
     public Map<String,Integer> getWorkerWithLessTopicsHashMap(List<String> servers,String cluster){
         Map<String,Integer> server_map  = new HashMap<>();
