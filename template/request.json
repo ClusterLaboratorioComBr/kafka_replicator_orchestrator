@@ -2,10 +2,15 @@
   "action": "redistribute",
   "cluster": "kafka_cluster_a",
   "servers": [
-    "um",
+    "casa",
     "dois",
     "tres"
   ],
   "topics": [
+    "batatinha",
+    "sdfsdf",
+    "batatdgginha",
+    "dfhdfgh",
+    "sdfgsdfsf"
   ]
 }

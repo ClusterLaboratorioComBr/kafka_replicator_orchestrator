@@ -1,7 +1,6 @@
-CREATE TABLE IF NOT EXISTS `spring`.`topic` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `cluster` VARCHAR(45) NOT NULL,
-  `worker` VARCHAR(45) NOT NULL,
-  `updated` DATE NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE IF NOT EXISTS topic (
+ id INTEGER PRIMARY KEY,
+ name VARCHAR(45) NOT NULL,
+ cluster VARCHAR(45) NOT NULL,
+ worker VARCHAR(45) NOT NULL,
+ updated DATE NOT NULL);
