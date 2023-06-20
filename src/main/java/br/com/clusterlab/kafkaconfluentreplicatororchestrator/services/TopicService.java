@@ -88,7 +88,7 @@ public class TopicService {
             associationCount++;
             logger.info("Associating topic (" + associationCount + ") " + topicEntity.getCluster() + "/" + topicEntity.getName() + ":" + topicEntity.getWorker());
         }
-        logger.info("Updating " + topicsEntities.size() + " Topic(s) at database");
+        logger.info("Updating " + topicsEntities.size() + " Topic(s) in database");
         saveAll(topicsEntities);
 
         topicsEntities = findTopicsByCluster(cluster);
