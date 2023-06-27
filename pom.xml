@@ -108,6 +108,12 @@
 			<artifactId>bcprov-jdk18on</artifactId>
 			<version>1.73</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.cloud.tools</groupId>
+			<artifactId>jib-maven-plugin</artifactId>
+			<version>3.3.2</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -145,6 +151,47 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.2</version>
+				<configuration>
+					<allowInsecureRegistries>true</allowInsecureRegistries>
+					<from>
+						<image>${env.BUILD_SRC_IMAGE}</image>
+					</from>
+					<to>
+						<image>${env.BUILD_REGISTRY}/${env.BUILD_DST_IMAGE}</image>
+						<tags>
+							<tag>${env.BUILD_TAG}</tag>
+							<tag>latest</tag>
+						</tags>
+						<auth>
+							<username>${env.CR_USER}</username>
+							<password>${env.CR_PASS}</password>
+						</auth>
+					</to>
+					<container>
+						<user>1000</user>
+					</container>
+					<!--					<extraDirectories>-->
+					<!--						<paths>-->
+					<!--							<path>-->
+					<!--								<from>extra</from>-->
+					<!--								<into>/extra</into>-->
+					<!--							</path>-->
+					<!--						</paths>-->
+					<!--					</extraDirectories>-->
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

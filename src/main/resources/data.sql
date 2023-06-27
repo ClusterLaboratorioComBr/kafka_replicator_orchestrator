@@ -1,1 +1,1 @@
-INSERT INTO topic (id,name,cluster,worker,updated) VALUES ('100','test','clustera','workera','2013-12-03' );
+INSERT INTO topic (id,name,cluster,worker,updated) VALUES ('1','test','fake_cluster_name','faker_replicator_worker','2013-12-03' );
