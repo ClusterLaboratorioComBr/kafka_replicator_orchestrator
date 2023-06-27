@@ -2,7 +2,7 @@
 version: '3'
 services:
   repl-orquestrator-db:
-    image: "postgres:latest"
+    image: "15.3-alpine3.18"
     container_name: repl-orquestrator-db
     hostname: repl-orquestrator-db
     volumes:
