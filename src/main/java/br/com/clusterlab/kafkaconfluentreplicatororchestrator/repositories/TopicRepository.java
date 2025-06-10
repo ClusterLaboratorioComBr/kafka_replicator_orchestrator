@@ -1,7 +1,6 @@
 package br.com.clusterlab.kafkaconfluentreplicatororchestrator.repositories;
 
 import br.com.clusterlab.kafkaconfluentreplicatororchestrator.entities.Topic;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
