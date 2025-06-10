@@ -55,12 +55,12 @@ public class TopicService {
         topicRepository.saveAll(topics);
     }
 
-    public void insertTopics(Request resquest){
+    public void insertTopics(Request request){
         List<Topic> topicsEntities = new ArrayList<>();
-        String cluster = resquest.getCluster();
-        String action = resquest.getAction();
-        List<String> servers = resquest.getServers();
-        List<String> topics = resquest.getTopics();
+        String cluster = request.getCluster();
+        String action = request.getAction();
+        List<String> servers = request.getServers();
+        List<String> topics = request.getTopics();
         logger.info("Topics update. Action=" + action + ", cluster=" + cluster + ", servers=" + servers.toString() + ", topics_count=" + topics.size());
 
         if (Objects.equals(action, "redistribute")){
