@@ -37,7 +37,7 @@ public class ProjectConfig {
                             .roles(credential.getRole().toUpperCase())
                             .build();
                     users.createUser(user);
-                    logger.info("Loadded user \"" + credential.getUsername() + "\" to UserDetailsService.");
+                    logger.info("Loaded user \"" + credential.getUsername() + "\" to UserDetailsService.");
                 }
 
             } catch (JsonProcessingException e) {
