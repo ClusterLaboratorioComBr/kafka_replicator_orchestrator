@@ -20,7 +20,7 @@ services:
     hostname: repl-orquestrator-app
     container_name: repl-orquestrator-app
     environment:
-      - PSTGRES_URL=jdbc:postgresql://repl-orquestrator-db:5432/postgres
+      - POSTGRES_URL=jdbc:postgresql://repl-orquestrator-db:5432/postgres
       - POSTGRES_USER=postgresql
       - POSTGRES_PASSWORD=123mudar
       - POSTGRES_INIT=never
