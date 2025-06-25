@@ -22,7 +22,7 @@ import jakarta.validation.constraints.Pattern;
 @Generated("jsonschema2pojo")
 public class Request {
 
-    @Pattern(regexp = "^increment|redistribute",
+    @Pattern(regexp = "^(increment|redistribute)$",
             message="Action must be one of increment|redistribute")
     @NotNull
     @JsonProperty("action")

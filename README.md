@@ -25,3 +25,4 @@ The compose file will start both the application and a Postgres instance require
 
 ## Example API usage
 A sample request payload is available in [template/request.json](template/request.json). Use it as a reference when sending POST requests to `/api/topic`.
+The `action` field only accepts the values `increment` or `redistribute`.
